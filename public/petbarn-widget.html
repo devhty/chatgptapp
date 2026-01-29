@@ -682,7 +682,7 @@
       <!-- Payment Form -->
       <div class="payment-form" id="paymentForm">
         <div class="payment-form-header">
-          <button class="back-btn" onclick="hidePaymentForm()">←</button>
+          <button class="back-btn" onclick="hidePaymentForm()" aria-label="Back to cart">←</button>
           <span class="payment-title">💳 Payment Details</span>
         </div>
 
@@ -700,7 +700,7 @@
 
         <div class="form-group">
           <label for="cardNumber">Card Number</label>
-          <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number" />
+          <input type="tel" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number" inputmode="numeric" />
         </div>
 
         <div class="form-group">
@@ -711,11 +711,11 @@
         <div class="form-row">
           <div class="form-group">
             <label for="cardExpiry">Expiry Date</label>
-            <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp" />
+            <input type="tel" id="cardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp" inputmode="numeric" />
           </div>
           <div class="form-group">
             <label for="cardCvv">CVV</label>
-            <input type="text" id="cardCvv" placeholder="123" maxlength="4" autocomplete="cc-csc" />
+            <input type="tel" id="cardCvv" placeholder="123" maxlength="4" autocomplete="cc-csc" inputmode="numeric" />
           </div>
         </div>
 
@@ -1025,11 +1025,15 @@
           const formatted = formatCardNumber(e.target.value);
           e.target.value = formatted;
           
-          // Update preview
+          // Update preview with proper formatting
           const preview = document.getElementById("cardPreviewNumber");
           if (formatted.length > 0) {
-            const displayNumber = formatted.padEnd(19, "•").replace(/ /g, " ");
-            preview.textContent = displayNumber || "•••• •••• •••• ••••";
+            // Get digits only and pad to 16 digits with bullets
+            const digits = formatted.replace(/\D/g, "");
+            const paddedDigits = digits.padEnd(16, "•");
+            // Format as groups of 4
+            const displayNumber = paddedDigits.match(/.{1,4}/g).join(" ");
+            preview.textContent = displayNumber;
           } else {
             preview.textContent = "•••• •••• •••• ••••";
           }
