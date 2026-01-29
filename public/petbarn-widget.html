@@ -465,6 +465,156 @@
       opacity: 0.6;
       pointer-events: none;
     }
+
+    /* Credit Card Form */
+    .payment-form {
+      display: none;
+    }
+
+    .payment-form.active {
+      display: block;
+    }
+
+    .payment-form-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+      padding: 4px;
+    }
+
+    .back-btn:hover {
+      color: #333;
+    }
+
+    .payment-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .card-preview {
+      background: linear-gradient(135deg, #1d3557 0%, #457b9d 100%);
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(29, 53, 87, 0.3);
+    }
+
+    .card-preview-number {
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      font-family: monospace;
+    }
+
+    .card-preview-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .card-preview-name {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-preview-expiry {
+      font-size: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #1d3557;
+    }
+
+    .form-group input::placeholder {
+      color: #999;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .pay-btn {
+      width: 100%;
+      padding: 16px;
+      background: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+
+    .pay-btn:hover {
+      background: #238b7e;
+    }
+
+    .pay-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .secure-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #666;
+      margin-top: 12px;
+    }
+
+    .demo-notice {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #856404;
+    }
   </style>
 </head>
 <body>
@@ -519,14 +669,68 @@
           <p>Your cart is empty</p>
         </div>
       </div>
-      <div class="cart-footer">
+      <div class="cart-footer" id="cartFooter">
         <div class="cart-total">
           <span>Total</span>
           <span class="cart-total-amount" id="cartTotal">$0.00</span>
         </div>
-        <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
+        <button class="checkout-btn" id="checkoutBtn" onclick="showPaymentForm()" disabled>
           Proceed to Checkout
         </button>
+      </div>
+
+      <!-- Payment Form -->
+      <div class="payment-form" id="paymentForm">
+        <div class="payment-form-header">
+          <button class="back-btn" onclick="hidePaymentForm()">←</button>
+          <span class="payment-title">💳 Payment Details</span>
+        </div>
+
+        <div class="demo-notice">
+          ⚠️ <strong>Demo Mode:</strong> This is a demo checkout. Any card details entered will be accepted and no real payment will be processed.
+        </div>
+
+        <div class="card-preview">
+          <div class="card-preview-number" id="cardPreviewNumber">•••• •••• •••• ••••</div>
+          <div class="card-preview-row">
+            <div class="card-preview-name" id="cardPreviewName">YOUR NAME</div>
+            <div class="card-preview-expiry" id="cardPreviewExpiry">MM/YY</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardNumber">Card Number</label>
+          <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number" />
+        </div>
+
+        <div class="form-group">
+          <label for="cardName">Cardholder Name</label>
+          <input type="text" id="cardName" placeholder="John Doe" autocomplete="cc-name" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cardExpiry">Expiry Date</label>
+            <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp" />
+          </div>
+          <div class="form-group">
+            <label for="cardCvv">CVV</label>
+            <input type="text" id="cardCvv" placeholder="123" maxlength="4" autocomplete="cc-csc" />
+          </div>
+        </div>
+
+        <div class="cart-total" style="margin-top: 16px;">
+          <span>Total to Pay</span>
+          <span class="cart-total-amount" id="paymentTotal">$0.00</span>
+        </div>
+
+        <button class="pay-btn" id="payBtn" onclick="processPayment()">
+          Pay Now
+        </button>
+
+        <div class="secure-notice">
+          🔒 Demo payment - no real charges
+        </div>
       </div>
     </div>
   </div>
@@ -752,7 +956,109 @@
 
     function closeCart() {
       document.getElementById("cartOverlay").classList.remove("open");
+      hidePaymentForm();
     }
+
+    // Payment Form Functions
+    function showPaymentForm() {
+      document.getElementById("cartItems").style.display = "none";
+      document.getElementById("cartFooter").style.display = "none";
+      document.getElementById("paymentForm").classList.add("active");
+      document.getElementById("paymentTotal").textContent = `$${state.cart.total.toFixed(2)}`;
+      
+      // Reset form fields
+      document.getElementById("cardNumber").value = "";
+      document.getElementById("cardName").value = "";
+      document.getElementById("cardExpiry").value = "";
+      document.getElementById("cardCvv").value = "";
+      
+      // Reset card preview
+      document.getElementById("cardPreviewNumber").textContent = "•••• •••• •••• ••••";
+      document.getElementById("cardPreviewName").textContent = "YOUR NAME";
+      document.getElementById("cardPreviewExpiry").textContent = "MM/YY";
+    }
+
+    function hidePaymentForm() {
+      document.getElementById("cartItems").style.display = "block";
+      document.getElementById("cartFooter").style.display = "block";
+      document.getElementById("paymentForm").classList.remove("active");
+    }
+
+    function formatCardNumber(value) {
+      // Remove all non-digit characters
+      const digits = value.replace(/\D/g, "");
+      // Add space every 4 digits
+      const formatted = digits.replace(/(\d{4})(?=\d)/g, "$1 ");
+      return formatted.substring(0, 19); // Max 16 digits + 3 spaces
+    }
+
+    function formatExpiry(value) {
+      // Remove all non-digit characters
+      const digits = value.replace(/\D/g, "");
+      if (digits.length >= 2) {
+        return digits.substring(0, 2) + "/" + digits.substring(2, 4);
+      }
+      return digits;
+    }
+
+    function formatCvv(value) {
+      // Remove all non-digit characters and limit to 4 digits
+      return value.replace(/\D/g, "").substring(0, 4);
+    }
+
+    function processPayment() {
+      // For demo purposes, always process successfully
+      // Just call the checkout function which handles the order
+      callTool("checkout", {});
+      hidePaymentForm();
+    }
+
+    // Set up input event listeners for credit card form
+    document.addEventListener("DOMContentLoaded", function() {
+      const cardNumberInput = document.getElementById("cardNumber");
+      const cardNameInput = document.getElementById("cardName");
+      const cardExpiryInput = document.getElementById("cardExpiry");
+      const cardCvvInput = document.getElementById("cardCvv");
+
+      if (cardNumberInput) {
+        cardNumberInput.addEventListener("input", function(e) {
+          const formatted = formatCardNumber(e.target.value);
+          e.target.value = formatted;
+          
+          // Update preview
+          const preview = document.getElementById("cardPreviewNumber");
+          if (formatted.length > 0) {
+            const displayNumber = formatted.padEnd(19, "•").replace(/ /g, " ");
+            preview.textContent = displayNumber || "•••• •••• •••• ••••";
+          } else {
+            preview.textContent = "•••• •••• •••• ••••";
+          }
+        });
+      }
+
+      if (cardNameInput) {
+        cardNameInput.addEventListener("input", function(e) {
+          const preview = document.getElementById("cardPreviewName");
+          preview.textContent = e.target.value.toUpperCase() || "YOUR NAME";
+        });
+      }
+
+      if (cardExpiryInput) {
+        cardExpiryInput.addEventListener("input", function(e) {
+          const formatted = formatExpiry(e.target.value);
+          e.target.value = formatted;
+          
+          const preview = document.getElementById("cardPreviewExpiry");
+          preview.textContent = formatted || "MM/YY";
+        });
+      }
+
+      if (cardCvvInput) {
+        cardCvvInput.addEventListener("input", function(e) {
+          e.target.value = formatCvv(e.target.value);
+        });
+      }
+    });
 
     function filterCategory(category) {
       state.currentCategory = category;
