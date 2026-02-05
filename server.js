@@ -5,75 +5,31 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod";
 
-const shopHtml = readFileSync("public/petbarn-widget.html", "utf8");
+// Load product data from JSON file
+const productData = JSON.parse(readFileSync("public/data/products.json", "utf8"));
+const PRODUCTS = productData.products;
 
-// Product catalog - 4 dog food, 4 cat food
-const PRODUCTS = [
-  {
-    id: "dog-1",
-    name: "Royal Canin Adult Dog",
-    price: 89.99,
-    description: "Premium nutrition for adult dogs, supports healthy digestion",
-    category: "dog",
-    image: "https://placehold.co/200x200/e8d5b7/333?text=🐕+Royal+Canin",
-  },
-  {
-    id: "dog-2",
-    name: "Hill's Science Diet Puppy",
-    price: 74.99,
-    description: "Specially formulated for growing puppies with DHA",
-    category: "dog",
-    image: "https://placehold.co/200x200/e8d5b7/333?text=🐶+Hills",
-  },
-  {
-    id: "dog-3",
-    name: "Blue Buffalo Wilderness",
-    price: 64.99,
-    description: "High-protein, grain-free recipe with real chicken",
-    category: "dog",
-    image: "https://placehold.co/200x200/e8d5b7/333?text=🐕+Blue+Buffalo",
-  },
-  {
-    id: "dog-4",
-    name: "Purina Pro Plan Sport",
-    price: 59.99,
-    description: "Advanced nutrition for active dogs, 30% protein",
-    category: "dog",
-    image: "https://placehold.co/200x200/e8d5b7/333?text=🐕+Purina",
-  },
-  {
-    id: "cat-1",
-    name: "Royal Canin Indoor Cat",
-    price: 49.99,
-    description: "Tailored nutrition for indoor cats, hairball control",
-    category: "cat",
-    image: "https://placehold.co/200x200/d5e8e8/333?text=🐱+Royal+Canin",
-  },
-  {
-    id: "cat-2",
-    name: "Hill's Science Diet Adult",
-    price: 44.99,
-    description: "Balanced nutrition for adult cats, easy digestion",
-    category: "cat",
-    image: "https://placehold.co/200x200/d5e8e8/333?text=🐱+Hills",
-  },
-  {
-    id: "cat-3",
-    name: "Blue Buffalo Tastefuls",
-    price: 39.99,
-    description: "Natural cat food with real salmon, no by-products",
-    category: "cat",
-    image: "https://placehold.co/200x200/d5e8e8/333?text=🐱+Blue+Buffalo",
-  },
-  {
-    id: "cat-4",
-    name: "Purina ONE Healthy Kitten",
-    price: 34.99,
-    description: "DHA for brain and vision development in kittens",
-    category: "cat",
-    image: "https://placehold.co/200x200/d5e8e8/333?text=🐱+Purina",
-  },
+// Widget products - 9 items: 5 dog food + 4 cat food for a balanced display
+const WIDGET_PRODUCTS = [
+  ...PRODUCTS.filter(p => p.category === "dog").slice(0, 5),
+  ...PRODUCTS.filter(p => p.category === "cat").slice(0, 4),
 ];
+
+// Load HTML templates
+const widgetHtmlTemplate = readFileSync("public/petbarn-widget.html", "utf8");
+const webPageHtmlTemplate = readFileSync("public/petbarn.html", "utf8");
+
+// Inject products into HTML at runtime
+function injectProducts(html, products) {
+  return html.replace(
+    "/*__PRODUCTS_INJECTION__*/",
+    `window.PRODUCTS = ${JSON.stringify(products)};`
+  );
+}
+
+// Widget uses limited 9 products, web page uses all products
+const shopHtml = injectProducts(widgetHtmlTemplate, WIDGET_PRODUCTS);
+const webPageHtml = injectProducts(webPageHtmlTemplate, PRODUCTS);
 
 const CATEGORIES = ["all", "dog", "cat"];
 
@@ -97,10 +53,11 @@ function getCartItemCount(cart) {
 
 const replyWithShopState = (cartId, message, category = "all") => {
   const cart = getCart(cartId);
+  // Widget uses limited product set
   const filteredProducts =
     category === "all"
-      ? PRODUCTS
-      : PRODUCTS.filter((p) => p.category === category);
+      ? WIDGET_PRODUCTS
+      : WIDGET_PRODUCTS.filter((p) => p.category === category);
 
   return {
     content: message ? [{ type: "text", text: message }] : [],
@@ -367,6 +324,27 @@ const httpServer = createServer(async (req, res) => {
   if (req.method === "GET" && url.pathname === "/") {
     res.writeHead(200, { "content-type": "text/plain" }).end("Petstores MCP server");
     return;
+  }
+
+  // Serve the full web page at /petstores
+  if (req.method === "GET" && url.pathname === "/petstores") {
+    res.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end(webPageHtml);
+    return;
+  }
+
+  // Serve static files from public directory
+  if (req.method === "GET" && url.pathname.startsWith("/data/")) {
+    try {
+      const filePath = `public${url.pathname}`;
+      const content = readFileSync(filePath, "utf8");
+      const ext = url.pathname.split(".").pop();
+      const mimeTypes = { json: "application/json", html: "text/html", css: "text/css", js: "application/javascript" };
+      res.writeHead(200, { "content-type": mimeTypes[ext] || "text/plain" }).end(content);
+      return;
+    } catch {
+      res.writeHead(404).end("Not Found");
+      return;
+    }
   }
 
   const MCP_METHODS = new Set(["POST", "GET", "DELETE"]);

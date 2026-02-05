@@ -461,6 +461,221 @@
       background: #E6B800;
     }
 
+    /* Payment Form */
+    .payment-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .payment-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .payment-modal {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .payment-overlay.open .payment-modal {
+      transform: scale(1);
+    }
+
+    .payment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: white;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .payment-header h2 {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .payment-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .payment-body {
+      padding: 20px;
+    }
+
+    .payment-summary {
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .payment-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .payment-summary-row.total {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+      margin-bottom: 0;
+    }
+
+    .form-section {
+      margin-bottom: 20px;
+    }
+
+    .form-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-group {
+      flex: 1;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fafafa;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #FFCC00;
+      background: white;
+    }
+
+    .form-group input.card-input {
+      background: #fafafa url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Crect x='1' y='4' width='22' height='16' rx='2' ry='2'/%3E%3Cline x1='1' y1='10' x2='23' y2='10'/%3E%3C/svg%3E") no-repeat right 12px center;
+      background-size: 20px;
+      padding-right: 44px;
+    }
+
+    .card-icons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .card-icon {
+      font-size: 24px;
+      opacity: 0.4;
+    }
+
+    .card-icon.active {
+      opacity: 1;
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #2a9d8f;
+      margin-top: 16px;
+      justify-content: center;
+    }
+
+    .payment-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      border-top: 1px solid #eee;
+      background: #f9f9f9;
+      border-radius: 0 0 16px 16px;
+    }
+
+    .pay-btn {
+      width: 100%;
+      padding: 16px;
+      background: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .pay-btn:hover {
+      background: #238b7e;
+    }
+
+    .back-btn {
+      width: 100%;
+      padding: 12px;
+      background: white;
+      color: #666;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .back-btn:hover {
+      background: #f5f5f5;
+    }
+
     /* Loading state */
     .loading {
       opacity: 0.6;
@@ -525,16 +740,113 @@
           <span>Total</span>
           <span class="cart-total-amount" id="cartTotal">$0.00</span>
         </div>
-        <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
+        <button class="checkout-btn" id="checkoutBtn" onclick="showPaymentForm()" disabled>
           Proceed to Checkout
         </button>
       </div>
     </div>
   </div>
 
+  <!-- Payment Form Overlay -->
+  <div class="payment-overlay" id="paymentOverlay" onclick="closePaymentForm()">
+    <div class="payment-modal" onclick="event.stopPropagation()">
+      <div class="payment-header">
+        <h2>💳 Payment Details</h2>
+        <button class="payment-close" onclick="closePaymentForm()">×</button>
+      </div>
+      <div class="payment-body">
+        <!-- Order Summary -->
+        <div class="payment-summary">
+          <div class="payment-summary-row">
+            <span>Subtotal</span>
+            <span id="paymentSubtotal">$0.00</span>
+          </div>
+          <div class="payment-summary-row">
+            <span>Shipping</span>
+            <span>FREE</span>
+          </div>
+          <div class="payment-summary-row">
+            <span>Tax (10%)</span>
+            <span id="paymentTax">$0.00</span>
+          </div>
+          <div class="payment-summary-row total">
+            <span>Total</span>
+            <span id="paymentTotal">$0.00</span>
+          </div>
+        </div>
+
+        <!-- Card Details -->
+        <div class="form-section">
+          <div class="form-section-title">💳 Card Information</div>
+          <div class="form-group">
+            <label>Card Number</label>
+            <input type="text" class="card-input" value="4532 8901 2345 6789" readonly />
+          </div>
+          <div class="card-icons">
+            <span class="card-icon active">💳</span>
+            <span class="card-icon" title="Visa">🅥</span>
+            <span class="card-icon" title="Mastercard">Ⓜ</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Expiry Date</label>
+              <input type="text" value="12/27" readonly />
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" value="•••" readonly />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Cardholder Name</label>
+            <input type="text" value="JOHN M SMITH" readonly />
+          </div>
+        </div>
+
+        <!-- Billing Address -->
+        <div class="form-section">
+          <div class="form-section-title">📍 Billing Address</div>
+          <div class="form-group">
+            <label>Street Address</label>
+            <input type="text" value="123 Pet Lover Lane" readonly />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" value="Sydney" readonly />
+            </div>
+            <div class="form-group">
+              <label>Postcode</label>
+              <input type="text" value="2000" readonly />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Country</label>
+            <input type="text" value="Australia" readonly />
+          </div>
+        </div>
+
+        <div class="secure-badge">
+          🔒 Your payment is secured with 256-bit SSL encryption
+        </div>
+      </div>
+      <div class="payment-actions">
+        <button class="pay-btn" onclick="confirmPayment()">
+          💳 Pay <span id="payBtnAmount">$0.00</span>
+        </button>
+        <button class="back-btn" onclick="closePaymentForm()">
+          ← Back to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Default product catalog (embedded for immediate rendering)
-    const DEFAULT_PRODUCTS = [
+    // Products injected by server at runtime
+    /*__PRODUCTS_INJECTION__*/
+
+    // Default product catalog (fallback if not injected)
+    const DEFAULT_PRODUCTS = window.PRODUCTS || [
       {
         id: "dog-1",
         name: "Royal Canin Adult Dog",
@@ -601,9 +913,12 @@
       },
     ];
 
+    // Use injected products if available, otherwise fallback to embedded defaults
+    const PRODUCT_CATALOG = window.PRODUCTS || DEFAULT_PRODUCTS;
+
     // State
     let state = {
-      products: DEFAULT_PRODUCTS,
+      products: PRODUCT_CATALOG,
       cart: { items: [], total: 0, itemCount: 0 },
       categories: ["all", "dog", "cat"],
       currentCategory: "all",
@@ -782,6 +1097,30 @@
     function continueShopping() {
       state.orderConfirmation = null;
       hideOrderConfirmation();
+    }
+
+    // Payment Form Functions
+    function showPaymentForm() {
+      const subtotal = state.cart.total;
+      const tax = subtotal * 0.10;
+      const total = subtotal + tax;
+
+      document.getElementById("paymentSubtotal").textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById("paymentTax").textContent = `$${tax.toFixed(2)}`;
+      document.getElementById("paymentTotal").textContent = `$${total.toFixed(2)}`;
+      document.getElementById("payBtnAmount").textContent = `$${total.toFixed(2)}`;
+
+      closeCart();
+      document.getElementById("paymentOverlay").classList.add("open");
+    }
+
+    function closePaymentForm() {
+      document.getElementById("paymentOverlay").classList.remove("open");
+    }
+
+    function confirmPayment() {
+      closePaymentForm();
+      checkout();
     }
 
     // MCP Tool Calls - use optimistic local updates for smooth UX
