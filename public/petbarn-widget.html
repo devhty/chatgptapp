@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Petbarn Shop</title>
+  <title>Petstores Shop</title>
   <style>
     * {
       box-sizing: border-box;
@@ -29,12 +29,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(135deg, #e63946 0%, #d62839 100%);
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
       color: white;
       padding: 16px 20px;
       border-radius: 12px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .logo {
@@ -51,8 +51,8 @@
 
     .cart-btn {
       position: relative;
-      background: white;
-      color: #e63946;
+      background: #FFCC00;
+      color: #1a1a1a;
       border: none;
       padding: 10px 16px;
       border-radius: 8px;
@@ -74,7 +74,7 @@
       position: absolute;
       top: -8px;
       right: -8px;
-      background: #1d3557;
+      background: #1a1a1a;
       color: white;
       font-size: 12px;
       font-weight: 700;
@@ -100,9 +100,9 @@
 
     .category-btn {
       padding: 10px 20px;
-      border: 2px solid #e63946;
+      border: 2px solid #FFCC00;
       background: white;
-      color: #e63946;
+      color: #1a1a1a;
       border-radius: 25px;
       cursor: pointer;
       font-size: 14px;
@@ -111,12 +111,13 @@
     }
 
     .category-btn:hover {
-      background: #fff5f5;
+      background: #FFCC00;
+      color: #1a1a1a;
     }
 
     .category-btn.active {
-      background: #e63946;
-      color: white;
+      background: #FFCC00;
+      color: #1a1a1a;
     }
 
     /* Product Grid */
@@ -166,7 +167,7 @@
     .product-price {
       font-size: 18px;
       font-weight: 700;
-      color: #e63946;
+      color: #1a1a1a;
       margin-bottom: 12px;
     }
 
@@ -180,9 +181,9 @@
     .qty-btn {
       width: 32px;
       height: 32px;
-      border: 2px solid #e63946;
+      border: 2px solid #FFCC00;
       background: white;
-      color: #e63946;
+      color: #1a1a1a;
       border-radius: 8px;
       cursor: pointer;
       font-size: 18px;
@@ -194,8 +195,8 @@
     }
 
     .qty-btn:hover {
-      background: #e63946;
-      color: white;
+      background: #FFCC00;
+      color: #1a1a1a;
     }
 
     .qty-btn:disabled {
@@ -213,8 +214,8 @@
     .add-btn {
       flex: 1;
       padding: 10px 16px;
-      background: #e63946;
-      color: white;
+      background: #FFCC00;
+      color: #1a1a1a;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -224,7 +225,7 @@
     }
 
     .add-btn:hover {
-      background: #d62839;
+      background: #E6B800;
     }
 
     .add-btn:disabled {
@@ -342,7 +343,7 @@
 
     .cart-item-price {
       font-size: 14px;
-      color: #e63946;
+      color: #1a1a1a;
       font-weight: 600;
     }
 
@@ -369,7 +370,7 @@
     }
 
     .remove-btn:hover {
-      color: #e63946;
+      color: #1a1a1a;
     }
 
     .cart-footer {
@@ -388,14 +389,14 @@
     }
 
     .cart-total-amount {
-      color: #e63946;
+      color: #1a1a1a;
       font-size: 24px;
     }
 
     .checkout-btn {
       width: 100%;
       padding: 16px;
-      background: #1d3557;
+      background: #1a1a1a;
       color: white;
       border: none;
       border-radius: 10px;
@@ -406,7 +407,7 @@
     }
 
     .checkout-btn:hover {
-      background: #152a45;
+      background: #333;
     }
 
     .checkout-btn:disabled {
@@ -447,8 +448,8 @@
 
     .continue-btn {
       padding: 14px 32px;
-      background: #e63946;
-      color: white;
+      background: #FFCC00;
+      color: #1a1a1a;
       border: none;
       border-radius: 10px;
       cursor: pointer;
@@ -457,7 +458,7 @@
     }
 
     .continue-btn:hover {
-      background: #d62839;
+      background: #E6B800;
     }
 
     /* Loading state */
@@ -473,7 +474,7 @@
     <header class="header">
       <div class="logo">
         <span class="logo-icon">🐾</span>
-        <span>Petbarn</span>
+        <span>Petstores</span>
       </div>
       <button class="cart-btn" onclick="openCart()">
         🛒 Cart

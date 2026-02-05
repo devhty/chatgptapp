@@ -142,13 +142,13 @@ const updateQuantitySchema = {
 const checkoutSchema = {};
 
 function createPetbarnServer() {
-  const server = new McpServer({ name: "petbarn-shop", version: "0.1.0" });
+  const server = new McpServer({ name: "petstores-shop", version: "0.1.0" });
 
   // Generate a cart ID for this session
   const cartId = randomUUID();
 
   server.registerResource(
-    "petbarn-shop",
+    "petstores-shop",
     "ui://widget/petbarn.html",
     {},
     async () => ({
@@ -166,9 +166,9 @@ function createPetbarnServer() {
   server.registerTool(
     "open_shop",
     {
-      title: "Open Petbarn Shop",
+      title: "Open Petstores Shop",
       description:
-        "Opens the Petbarn pet food shop. Optionally filter by category: 'dog', 'cat', or 'all'.",
+        "Opens the Petstores pet food shop. Optionally filter by category: 'dog', 'cat', or 'all'.",
       inputSchema: openShopSchema,
       _meta: {
         "openai/outputTemplate": "ui://widget/petbarn.html",
@@ -178,7 +178,7 @@ function createPetbarnServer() {
     },
     async (args) => {
       const category = args?.category ?? "all";
-      return replyWithShopState(cartId, "Welcome to Petbarn! Browse our selection of premium pet food.", category);
+      return replyWithShopState(cartId, "Welcome to Petstores! Browse our selection of premium pet food.", category);
     }
   );
 
@@ -317,7 +317,7 @@ function createPetbarnServer() {
         content: [
           {
             type: "text",
-            text: `🎉 Order confirmed! Order ID: ${orderId}. Total: $${total.toFixed(2)} for ${itemCount} item(s). Thank you for shopping at Petbarn!`,
+            text: `🎉 Order confirmed! Order ID: ${orderId}. Total: $${total.toFixed(2)} for ${itemCount} item(s). Thank you for shopping at Petstores!`,
           },
         ],
         structuredContent: {
@@ -365,7 +365,7 @@ const httpServer = createServer(async (req, res) => {
   }
 
   if (req.method === "GET" && url.pathname === "/") {
-    res.writeHead(200, { "content-type": "text/plain" }).end("Petbarn MCP server");
+    res.writeHead(200, { "content-type": "text/plain" }).end("Petstores MCP server");
     return;
   }
 
@@ -402,6 +402,6 @@ const httpServer = createServer(async (req, res) => {
 
 httpServer.listen(port, () => {
   console.log(
-    `Petbarn MCP server listening on http://localhost:${port}${MCP_PATH}`
+    `Petstores MCP server listening on http://localhost:${port}${MCP_PATH}`
   );
 });
